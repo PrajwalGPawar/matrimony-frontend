@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom'; 
 import '../styles/Login.css';
 
 const Login = () => {
@@ -28,7 +29,7 @@ const Login = () => {
 
       if (response.status === 200) {
         alert('Login successful!');
-        navigate('/home');
+        navigate('/Landing');
       }
     } catch (error) {
       if (error.response?.status === 401) {
@@ -42,9 +43,7 @@ const Login = () => {
   return (
     <div className="login-page">
     
-      <div className="profile-button">
-        <Link to="/Reg" className="btn">Profile</Link>
-      </div>
+      
 
       <div className="overlay">
         <div className="login-box">
