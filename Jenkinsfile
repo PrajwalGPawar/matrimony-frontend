@@ -21,14 +21,14 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube Server') {
-                    // Use the sonar-scanner installed locally in node_modules
-                    bat '.\\node_modules\\.bin\\sonar-scanner.cmd'
-                }
-            }
+       stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('SonarQube Server') {
+            bat '.\\node_modules\\.bin\\sonar-scanner.cmd -Dsonar.projectKey=matrimony-frontend -Dsonar.sources=src'
         }
+    }
+}
+
 
         // Optional: for debugging
         stage('Debug: List Files') {
