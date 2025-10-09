@@ -53,8 +53,8 @@
     "@testing-library/react": "^16.3.0",
     "babel-jest": "^30.2.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.5.1",
-      "sonar-scanner": "^3.1.0"
+    "jest": "^27.5.1"
+     
   },
   "jest": {
   "testMatch": [
