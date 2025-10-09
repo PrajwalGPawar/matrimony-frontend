@@ -1,12 +1,7 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/PrajwalGPawar/matrimony-frontend.git', branch: 'dev'
-            }
-        }
+   
 
         stage('Install Dependencies') {
             steps {
@@ -21,6 +16,13 @@ pipeline {
             steps {
                 dir('matrimony-frontend') {
                     bat 'npm run build'
+                }
+            }
+        }
+stage('Test') {
+            steps {
+                dir('matrimony-frontend') {
+                    bat 'npm test'
                 }
             }
         }
