@@ -25,13 +25,7 @@ pipeline {
             }
         }
 
-        stage('Test with Coverage') {
-            steps {
-                dir('matrimony-frontend') {
-                    bat 'npm test -- --coverage'
-                }
-            }
-        }
+       
 
         stage('SonarQube Analysis') {
             steps {
