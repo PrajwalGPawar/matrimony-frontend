@@ -4,47 +4,43 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                dir('matrimony-frontend') {
-                    bat 'npm install'
-                    bat 'npm install --save-dev sonar-scanner'
-                }
+                bat 'npm install'
+                bat 'npm install --save-dev jest-watch-typeahead@0.6.5 sonar-scanner'
             }
         }
 
         stage('Build') {
             steps {
-                dir('matrimony-frontend') {
-                    bat 'npm run build'
-                }
+                bat 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                dir('matrimony-frontend') {
-                    // Set CI=true to avoid jest watch plugin error on Jenkins
-                    bat 'set CI=true && npm test -- --coverage'
-                }
+                bat 'npm test'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                dir('matrimony-frontend') {
-                    withSonarQubeEnv('SonarQube Server') {
-                        bat '.\\node_modules\\.bin\\sonar-scanner.cmd'
-                    }
+                withSonarQubeEnv('SonarQube Server') {
+                    // Use the sonar-scanner installed locally in node_modules
+                    bat '.\\node_modules\\.bin\\sonar-scanner.cmd'
                 }
+            }
+        }
+
+        // Optional: for debugging
+        stage('Debug: List Files') {
+            steps {
+                bat 'dir /s'
             }
         }
 
         stage('Archive Build') {
             steps {
-                dir('matrimony-frontend') {
-                    archiveArtifacts artifacts: 'build/**', fingerprint: true
-                }
+                archiveArtifacts artifacts: 'build/**', fingerprint: true
             }
         }
     }
 }
-
