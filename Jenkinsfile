@@ -54,9 +54,10 @@ pipeline {
 
         stage('Archive Build') {
             steps {
-                dir('matrimony-frontend') {
-                    archiveArtifacts artifacts: 'build/**', fingerprint: true
-                }
+                dir('matrimony-frontend/matrimony-frontend') {
+    archiveArtifacts artifacts: 'build/**', fingerprint: true
+}
+
             }
         }
     }
