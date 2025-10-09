@@ -1,8 +1,7 @@
 pipeline {
     agent any
 
-   
-
+    stages {
         stage('Install Dependencies') {
             steps {
                 dir('matrimony-frontend') {
@@ -19,15 +18,15 @@ pipeline {
                 }
             }
         }
-stage('Test') {
+
+        stage('Test') {
             steps {
                 dir('matrimony-frontend') {
-                    bat 'npm test'
+                    // Set CI=true to avoid jest watch plugin error on Jenkins
+                    bat 'set CI=true && npm test -- --coverage'
                 }
             }
         }
-
-       
 
         stage('SonarQube Analysis') {
             steps {
@@ -47,4 +46,5 @@ stage('Test') {
             }
         }
     }
+}
 
