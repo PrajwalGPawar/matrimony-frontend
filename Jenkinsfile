@@ -2,10 +2,17 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/PrajwalGPawar/matrimony-frontend.git', branch: 'dev'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 dir('matrimony-frontend') {
-                    bat 'npm install && npm install --save-dev jest-watch-typeahead@0.6.5 sonar-scanner'
+                    bat 'npm install'
+                    bat 'npm install --save-dev sonar-scanner'
                 }
             }
         }
@@ -18,10 +25,10 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Test with Coverage') {
             steps {
                 dir('matrimony-frontend') {
-                    bat 'npm test'
+                    bat 'npm test -- --coverage'
                 }
             }
         }
@@ -32,14 +39,6 @@ pipeline {
                     withSonarQubeEnv('SonarQube Server') {
                         bat '.\\node_modules\\.bin\\sonar-scanner.cmd'
                     }
-                }
-            }
-        }
-
-        stage('Debug: List Files') {
-            steps {
-                dir('matrimony-frontend') {
-                    bat 'dir /s'
                 }
             }
         }
