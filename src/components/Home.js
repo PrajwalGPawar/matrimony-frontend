@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -14,10 +15,10 @@ const Home = () => {
         </div>
         <div className="nav-right">
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/">About</a></li>
-            <li><a href="/">Help</a></li>
-            <li><a href="/">Contact</a></li>
+             <li><Link to="/">Home</Link></li>
+      <li><Link to="/About">About</Link></li>
+      <li><Link to="/help">Help</Link></li>
+      <li><Link to="/contact">Contact</Link></li>
           </ul>
         </div>
       </nav>

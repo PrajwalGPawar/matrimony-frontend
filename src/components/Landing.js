@@ -43,25 +43,25 @@ const Landing = () => {
           {showDropdown && (
             <div className="profile-dropdown-form" ref={dropdownRef}>
               <button
-                className="profile-btn"
+                className="profile1-btn"
                 onClick={() => {
-                  navigate("/view-profile");
+                  navigate("/Viewprofile");
                   setShowDropdown(false);
                 }}
               >
                 View Profile
               </button>
               <button
-                className="profile-btn"
+                className="profile1-btn"
                 onClick={() => {
-                  navigate("/edit-profile");
+                  navigate("/Editprofile");
                   setShowDropdown(false);
                 }}
               >
                 Edit Profile
               </button>
               <button
-                className="profile-btn logout-btn"
+                className="profile-btn1 logout-btn"
                 onClick={() => {
                   handleLogout();
                   setShowDropdown(false);

@@ -21,7 +21,7 @@ const FindPartner = () => {
           <div className="findpartner-buttons">
             <button
               className="btn"
-              onClick={() => navigate("/find-through-profile")}
+              onClick={() => navigate("/Match")}
             >
               Find Through Profile
             </button>

@@ -1,0 +1,55 @@
+/* Full-page wrapper with background */
+.about-wrapper {
+  min-height: 100vh;
+  background: url('../assets/loginbg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* Transparent content card */
+.about-container {
+  max-width: 800px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.85); /* semi-transparent white */
+  border-radius: 15px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Title */
+.about-title {
+  text-align: center;
+  color: #2e8b57;
+  margin-bottom: 30px;
+}
+
+/* Section wrapper */
+.about-section {
+  margin-bottom: 30px;
+}
+
+/* Section heading */
+.about-heading {
+  color: #3a7d44;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #a3c293;
+  padding-bottom: 8px;
+}
+
+/* Paragraph text */
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.about-text strong {
+  color: #2e8b57;
+}

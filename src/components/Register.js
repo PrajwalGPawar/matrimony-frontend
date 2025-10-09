@@ -30,16 +30,16 @@ const Register = () => {
 
     const payload = {
       ...formData,
-      isActive: true, // sent to backend but not shown in form
+      isActive: true, 
     };
 
     try {
       console.log(payload);
-      const response = await axios.post('http://localhost:9091/api/users/register', payload);
+      const response = await axios.post('http://localhost:6002/auth/register', payload);
 
       if (response.status === 200 || response.status === 201) {
         alert('Registration successful!');
-        navigate('/');
+        navigate('/Login');
       }
     } catch (error) {
       alert('Registration failed. Please try again.');

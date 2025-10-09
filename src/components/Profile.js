@@ -1,5 +1,8 @@
 
-import React, { useState } from "react";
+
+
+
+  import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/Profile.css";
@@ -10,39 +13,23 @@ export default function Profile() {
   const [activeCard, setActiveCard] = useState(null);
 
   const [personal, setPersonal] = useState({
-    age: "",
-    height: "",
-    weight: "",
-    salaryPackage: "",
-    education: "",
-    occupation: "",
-    gender: "",
-    maritalStatus: "",
-    mangalik: "", // store as string "Yes"/"No" for select, convert on submit
-    disability: "",
-    disabilityType: "",
-    bloodGroup: "",
-    religion: "",
-    caste: "",
-    rashiId: "",
-    nakshatraId: "",
-    gotraId: "",
+    age: "", height: "", weight: "", salaryPackage: "", education: "", jobLocation: "",
+    occupation: "", gender: "", maritalStatus: "", mangalik: "", disability: "",
+    disabilityType: "", bloodGroup: "", religion: "", caste: "", rashiId: "",
+    paada: "", nakshatraId: "", gotraId: "",
   });
 
   const [address, setAddress] = useState({
-    city: "",
-    state: "",
-    postalCode: "",
-    country: "",
+    city: "", state: "", postalCode: "", country: "",
   });
 
   const [family, setFamily] = useState({
-    fatherName: "",
-    motherName: "",
-    siblingsCount: "",
-    annualIncome: "",
+    fatherName: "", motherName: "", siblingsCount: "", annualIncome: "",
   });
-const religionOptions = [
+
+  // (dropdown options unchanged...)
+    // Dropdown options (unchanged)
+ const religionOptions = [
     { id: 1, name: "Christianity" },
     { id: 2, name: "Judaism" },
     { id: 3, name: "Islam" },
@@ -140,94 +127,127 @@ const religionOptions = [
     { id: 7, name: "Vishwamitra" },
   ];
 
-  // Personal form change handler
   const handlePersonalChange = (e) => {
     const { name, value } = e.target;
     setPersonal((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Address form change handler
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setAddress((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Family form change handler
   const handleFamilyChange = (e) => {
     const { name, value } = e.target;
     setFamily((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit combined data
   const handleSubmit = async () => {
-    const payload = {
-      ...personal,
-      ...address,
-      ...family,
-      // Convert mangalik and disability strings to boolean or null
-      mangalik: personal.mangalik === "Yes" ? true : personal.mangalik === "No" ? false : null,
-      disability: personal.disability === "Yes" ? true : personal.disability === "No" ? false : null,
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      alert("User is not authenticated. Please login again.");
+      navigate("/Login");
+      return;
+    }
+
+    const requiredPersonalFields = [
+      "age", "height", "weight", "salaryPackage", "education", "occupation", "jobLocation", "gender", "maritalStatus",
+      "mangalik", "disability", "bloodGroup", "religion", "caste", "gotraId", "paada", "rashiId", "nakshatraId"
+    ];
+
+    const requiredAddressFields = ["city", "state", "postalCode", "country"];
+    const requiredFamilyFields = ["fatherName", "motherName", "siblingsCount", "annualIncome"];
+
+    for (const field of requiredPersonalFields) {
+      if (!personal[field]) {
+        alert(`Please fill in the ${field} field in Personal section.`);
+        return;
+      }
+    }
+
+    if (personal.disability === "Yes" && !personal.disabilityType) {
+      alert("Please specify the Disability Type.");
+      return;
+    }
+
+    for (const field of requiredAddressFields) {
+      if (!address[field]) {
+        alert(`Please fill in the ${field} field in Address section.`);
+        return;
+      }
+    }
+
+    for (const field of requiredFamilyFields) {
+      if (!family[field]) {
+        alert(`Please fill in the ${field} field in Family section.`);
+        return;
+      }
+    }
+
+    const personalData = {
+      age: Number(personal.age),
+      height: Number(personal.height),
+      weight: Number(personal.weight),
+      salaryPackage: Number(personal.salaryPackage),
+      education: personal.education,
+      occupation: personal.occupation,
+      jobLocation: personal.jobLocation,
+      gender: personal.gender,
+      maritalStatus: personal.maritalStatus,
+      mangalik: personal.mangalik === "Yes",
+      disability: personal.disability === "Yes",
       disabilityType: personal.disability === "Yes" ? personal.disabilityType : null,
-      rashiId: personal.rashiId ? Number(personal.rashiId) : null,
-      nakshatraId: personal.nakshatraId ? Number(personal.nakshatraId) : null,
-      gotraId: personal.gotraId ? Number(personal.gotraId) : null,
-      siblingsCount: family.siblingsCount ? Number(family.siblingsCount) : null,
-      annualIncome: family.annualIncome ? Number(family.annualIncome) : null,
-      age: personal.age ? Number(personal.age) : null,
-      height: personal.height ? Number(personal.height) : null,
-      weight: personal.weight ? Number(personal.weight) : null,
-      salaryPackage: personal.salaryPackage ? Number(personal.salaryPackage) : null,
+      bloodGroup: personal.bloodGroup,
+      religion: personal.religion,
+      caste: personal.caste,
+      gotraId: Number(personal.gotraId),
+      paada: Number(personal.paada),
+      rashiId: Number(personal.rashiId),
+      nakshatraId: Number(personal.nakshatraId),
     };
 
-  try {
-      setActiveCard(null); 
-    console.log("Payload to submit:", payload);
+    const familyData = {
+      fatherName: family.fatherName,
+      motherName: family.motherName,
+      siblingsCount: Number(family.siblingsCount),
+      annualIncome: Number(family.annualIncome),
+    };
 
-    const res = await axios.post(
-      "http://localhost:9091/api/users/registerDetails",
-      payload
-    );
-    if (res.status === 200 || res.status === 201) {
-      alert("Profile submitted successfully");
-     
-      navigate("/home");
-    } else {
-      alert("Unexpected response from server");
+    const addressData = {
+      city: address.city,
+      state: address.state,
+      postalCode: address.postalCode,
+      country: address.country,
+    };
+
+    try {
+      setActiveCard(null);
+      await Promise.all([
+        axios.post("http://localhost:6002/api/user-profiles/me", personalData, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.post("http://localhost:6002/api/family-details/me", familyData, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.post("http://localhost:6002/api/addresses/me", addressData, { headers: { Authorization: `Bearer ${token}` } }),
+      ]);
+
+      alert("Profile submitted successfully.");
+      navigate("/findpartner");
+    } catch (error) {
+      console.error("Error submitting profile data:", error);
+      alert("Failed to submit profile. Please check your data or try again later.");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Submission failed. Check console for details.");
-  }
-};
+  };
 
   return (
     <div className="profile-page">
-      <div className="overlay">
-        <div className="register-container" style={{ display: "flex" }}>
-          <div className="left-panel" style={{ width: "100%" }}>
-            <div
-              className="card-row-horizontal"
-              style={{ display: "flex", gap: "20px", justifyContent: "space-between", flexWrap: "wrap" }}
-            >
+      <div className="profile-overlay">
+        <div className="profile-container">
+          <div className="profile-left-panel">
+            <div className="profile-card-row">
+
               {/* Personal Card */}
-              <div className={`card ${activeCard === "personal" ? "active" : ""}`}>
-                <div
-                  onClick={() => setActiveCard(activeCard === "personal" ? null : "personal")}
-                  // style={{ cursor: "pointer", fontWeight: "bold", marginBottom: "8px" }}
-
-                  style={{ 
-  display: "flex", 
-  gap: "20px", 
-  justifyContent: "space-between", 
-  flexWrap: "wrap",
-  border: "2px solid white",  // add this for white border with thickness 2px
-  padding: "10px",            // optional, adds some inner space
-  borderRadius: "8px"         // optional, rounded corners for better look
-}}
-
-                >
+              <div className={`profile-card ${activeCard === "personal" ? "active" : ""}`}>
+                <div className="profile-card-header" onClick={() => setActiveCard(activeCard === "personal" ? null : "personal")}>
                   Personal
-                </div>
+                 </div>
 
                 {activeCard === "personal" && (
                   <div className="form-panel" style={{ marginTop: "10px" }}>
@@ -240,7 +260,7 @@ const religionOptions = [
                     <label>Weight (kg)</label>
                     <input type="number" name="weight" value={personal.weight} onChange={handlePersonalChange} />
 
-                    <label>Salary Package (LPA)</label>
+                    <label>Salary Package </label>
                     <input type="number" name="salaryPackage" value={personal.salaryPackage} onChange={handlePersonalChange} />
 
                     <label>Education</label>
@@ -248,12 +268,15 @@ const religionOptions = [
 
                     <label>Occupation</label>
                     <input type="text" name="occupation" value={personal.occupation} onChange={handlePersonalChange} />
+                     
+                      <label>Job Location</label>
+                    <input type="text" name="jobLocation" value={personal.jobLocation} onChange={handlePersonalChange} />
 
                     <label>Gender</label>
                     <select name="gender" value={personal.gender} onChange={handlePersonalChange}>
                       <option value="">Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
+                      <option value="False">Male</option>
+                      <option value="True">Female</option>
                     </select>
 
                     <label>Marital Status</label>
@@ -293,7 +316,7 @@ const religionOptions = [
                     <input type="text" name="bloodGroup" value={personal.bloodGroup} onChange={handlePersonalChange} />
 
                     <label>Religion</label>
-                    <select name="religion" value={personal.religion} onChange={handlePersonalChange}>
+                    <select name="religionId" value={personal.religion} onChange={handlePersonalChange}>
                       <option value="">Select</option>
                       {religionOptions.map((r) => (
                         <option key={r.id} value={r.name}>
@@ -303,7 +326,7 @@ const religionOptions = [
                     </select>
 
                     <label>Caste</label>
-                    <select name="caste" value={personal.caste} onChange={handlePersonalChange}>
+                    <select name="casteId" value={personal.caste} onChange={handlePersonalChange}>
                       <option value="">Select</option>
                       {casteOptions.map((c) => (
                         <option key={c.id} value={c.name}>
@@ -331,7 +354,16 @@ const religionOptions = [
                         </option>
                       ))}
                     </select>
-
+                     
+                     
+                    <label>Paada</label>
+                    <select name="paada" value={personal.paada} onChange={handlePersonalChange}>
+                      <option value="">Select</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                       <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
                     <label>Nakshatra</label>
                     <select name="nakshatraId" value={personal.nakshatraId} onChange={handlePersonalChange}>
                       <option value="">Select</option>
@@ -346,35 +378,18 @@ const religionOptions = [
               </div>
 
               {/* Address Card */}
-              <div className={`card ${activeCard === "address" ? "active" : ""}`}>
-                <div
-                  onClick={() => setActiveCard(activeCard === "address" ? null : "address")}
-                  // style={{ cursor: "pointer", fontWeight: "bold", marginBottom: "8px" }}
-                  style={{ 
-  display: "flex", 
-  gap: "20px", 
-  justifyContent: "space-between", 
-  flexWrap: "wrap",
-  border: "2px solid white",  // add this for white border with thickness 2px
-  padding: "10px",            // optional, adds some inner space
-  borderRadius: "8px"         // optional, rounded corners for better look
-}}
-
-                >
+              <div className={`profile-card ${activeCard === "address" ? "active" : ""}`}>
+                <div className="profile-card-header" onClick={() => setActiveCard(activeCard === "address" ? null : "address")}>
                   Address
                 </div>
-
                 {activeCard === "address" && (
-                  <div className="form-panel" style={{ marginTop: "10px" }}>
+                  <div className="profile-form">
                     <label>City</label>
                     <input type="text" name="city" value={address.city} onChange={handleAddressChange} />
-
                     <label>State</label>
                     <input type="text" name="state" value={address.state} onChange={handleAddressChange} />
-
                     <label>Postal Code</label>
                     <input type="text" name="postalCode" value={address.postalCode} onChange={handleAddressChange} />
-
                     <label>Country</label>
                     <input type="text" name="country" value={address.country} onChange={handleAddressChange} />
                   </div>
@@ -382,34 +397,18 @@ const religionOptions = [
               </div>
 
               {/* Family Card */}
-              <div className={`card ${activeCard === "family" ? "active" : ""}`}>
-                <div
-                  onClick={() => setActiveCard(activeCard === "family" ? null : "family")}
-                 style={{ 
-  display: "flex", 
-  gap: "20px", 
-  justifyContent: "space-between", 
-  flexWrap: "wrap",
-  border: "2px solid white",  // add this for white border with thickness 2px
-  padding: "10px",            // optional, adds some inner space
-  borderRadius: "8px"         // optional, rounded corners for better look
-}}
-
-                >
+              <div className={`profile-card ${activeCard === "family" ? "active" : ""}`}>
+                <div className="profile-card-header" onClick={() => setActiveCard(activeCard === "family" ? null : "family")}>
                   Family
                 </div>
-
                 {activeCard === "family" && (
-                  <div className="form-panel" style={{ marginTop: "10px" }}>
+                  <div className="profile-form">
                     <label>Father's Name</label>
                     <input type="text" name="fatherName" value={family.fatherName} onChange={handleFamilyChange} />
-
                     <label>Mother's Name</label>
                     <input type="text" name="motherName" value={family.motherName} onChange={handleFamilyChange} />
-
                     <label>Siblings Count</label>
                     <input type="number" name="siblingsCount" value={family.siblingsCount} onChange={handleFamilyChange} />
-
                     <label>Annual Income</label>
                     <input type="number" name="annualIncome" value={family.annualIncome} onChange={handleFamilyChange} />
                   </div>
@@ -417,11 +416,8 @@ const religionOptions = [
               </div>
             </div>
 
-            <br />
-
-            {/* Submit Button */}
-            <div className="submit-container" style={{ textAlign: "center" }}>
-              <button className="btn" onClick={handleSubmit} type="button" style={{ padding: "10px 20px", fontSize: "16px" }}>
+            <div className="profile-submit-container">
+              <button className="profile-btn" onClick={handleSubmit}>
                 Submit All
               </button>
             </div>

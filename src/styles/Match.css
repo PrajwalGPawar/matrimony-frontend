@@ -1,0 +1,163 @@
+#match-container {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+  padding: 30px;
+  color: #333;
+}
+
+#match-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#match-title {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #e91e63;
+  margin-bottom: 30px;
+  font-weight: 600;
+  font-size: 28px;
+}
+
+#match-grid {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+#match-profile-column-left {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  max-height: 520px;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  color: #333;
+}
+
+#match-profile-card {
+  background: #fdfdfd;
+  border: 1px solid #ddd;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+#match-profile-column-right {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 400px;
+  max-height: 520px;
+  overflow-y: auto;
+  color: #333;
+}
+
+.match-card {
+  background: #fdfdfd;
+  border: 1px solid #ddd;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  transition: 0.3s;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.match-card:hover {
+  border-color: #e91e63;
+  transform: scale(1.04);
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+}
+
+#match-card-list {
+  display: flex;
+  flex-direction: column;
+}
+
+#match-bottom-bar {
+  position: relative;
+  z-index: 2;
+  margin-top: 40px;
+  text-align: center;
+}
+
+#match-download-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#match-download-btn:hover {
+  background: #388e3c;
+}
+
+#match-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#match-modal-content {
+  background: white;
+  padding: 30px 30px 25px;
+  border-radius: 12px;
+  width: 450px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  color: #333;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+#match-profile-details p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+#match-close-btn {
+  margin-top: 25px;
+  background: #e91e63;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 15px;
+}
+
+#match-close-btn:hover {
+  background: #d81b60;
+}

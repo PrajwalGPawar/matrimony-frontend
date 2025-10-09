@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
   });
 
@@ -19,26 +19,54 @@ const Login = () => {
       [name]: value,
     }));
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  try {
+    const response = await axios.post('http://localhost:6002/auth/login', formData);
 
-    try {
-      console.log(formData)
-      const response = await axios.post('http://localhost:9091/api/users/login', formData);
+    if (response.status === 200) {
+      const token = response.data.token;
+      // console.log(token);
 
-      if (response.status === 200) {
-        alert('Login successful!');
-        navigate('/Landing');
-      }
-    } catch (error) {
-      if (error.response?.status === 401) {
-        alert('Invalid username or password');
-      } else {
-        alert('Server error. Please try again later.');
-      }
+      // Set expiry time: now + 24 hours
+      const expiry = new Date().getTime() + 24 * 60 * 60 * 1000;
+
+      // Store both token and expiry
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('tokenExpiry', expiry.toString());
+
+      alert('Login successful!');
+      navigate('/Landing');
     }
-  };
+  } catch (error) {
+    if (error.response?.status === 401) {
+      alert('Invalid email or password');
+    } else {
+      alert('Server error. Please try again later.');
+    }
+  }
+};
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     console.log(formData)
+  //     const response = await axios.post('http://localhost:6002/auth/login', formData);
+
+  //     if (response.status === 200) {
+  //       alert('Login successful!');
+  //       navigate('/Landing');
+  //     }
+  //   } catch (error) {
+  //     if (error.response?.status === 401) {
+  //       alert('Invalid email or password');
+  //     } else {
+  //       alert('Server error. Please try again later.');
+  //     }
+  //   }
+  // };
 
   return (
     <div className="login-page">
@@ -51,9 +79,9 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
+              name="email"
+              placeholder="email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
