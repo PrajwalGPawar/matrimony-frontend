@@ -4,8 +4,13 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
-                bat 'npm install --save-dev jest-watch-typeahead@0.6.5'
+                dir('matrimony-frontend') {
+                    // Install project dependencies including sonar-scanner
+                    bat 'npm install'
+                
+                    // Also install sonar-scanner locally (if not already in package.json)
+                    // bat 'npm install --save-dev sonar-scanner'
+                }
             }
         }
 
@@ -15,18 +20,28 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                bat 'npm test'
-            }
-        }
 
-        // Optional: for debugging
-        stage('Debug: List Files') {
-            steps {
-                bat 'dir /s'
-            }
-        }
+
+  stage('Test') {
+  steps {
+    dir('matrimony-frontend') {
+      bat 'npm test'
+    }
+  }
+}
+
+
+
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         dir('matrimony-frontend') {
+        //             withSonarQubeEnv('SonarQube Server') {
+        //                 // Use local sonar-scanner from node_modules
+        //                 bat '.\\node_modules\\.bin\\sonar-scanner.cmd'
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Archive Build') {
             steps {
