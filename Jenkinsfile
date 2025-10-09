@@ -14,6 +14,7 @@ pipeline {
                 dir('matrimony-frontend') {
                     // Install project dependencies including sonar-scanner
                     bat 'npm install'
+                    bat 'npm install --save-dev jest-watch-typeahead'
                     // Also install sonar-scanner locally (if not already in package.json)
                     // bat 'npm install --save-dev sonar-scanner'
                 }
